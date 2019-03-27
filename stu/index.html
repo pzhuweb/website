@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>幸运大抽奖</title>
+		<style>
+			body{
+				text-align: center;
+				background:url(bg.jpg);
+				background-repeat:no-repeat;
+				background-size:cover;
+			}
+			div{
+				height: 500px;  
+  				line-height:500px; 
+				width: 100%;
+				border: dotted 1px;	
+				font-family: "微软雅黑";
+				font-size: 40px;
+				margin:0 auto;						
+			}
+		</style>
+		<script type="text/javascript" src="js/getXmlDoc.js" ></script>
+		<script>
+			var flag=0;
+			var stuArray = new Array();
+			function fun(){
+				if (flag==0) {
+					T = setInterval(selectStu,20);
+					flag=1;
+				} else{
+					clearInterval(T);
+					flag = 0;
+				}				
+			}
+			function selectStu(){
+				var i = Math.floor(Math.random()*stuArray.length);
+				stu.innerHTML = stuArray[i];
+			}
+			
+			function loadstu(){
+				stuclass = document.getElementsByName("stu");
+				stu = document.getElementById("student");
+				for (var i=0;i<stuclass.length;i++) {
+					stuclass[i].addEventListener("change",loadData,true);
+				}
+				loadData();
+			}
+			
+			function loadData(){
+				stuArray.length = 0;
+				for (var i=0;i<stuclass.length;i++) {
+					if (stuclass[i].checked) {
+						var stutext  = getTextDoc("get","stu/java"+i+".txt");
+						var temp = stutext.match(/.{1,}/g);
+						stuArray = stuArray.concat(temp);
+					}
+				}
+			}
+		</script>
+	</head>
+	<body onkeypress="fun()" onload="loadstu()">
+		<input type="checkbox" name="stu"  checked="checked"/>2017级软件1班
+		<input type="checkbox" name="stu"/>2017级软件2班
+		<input type="checkbox" name="stu"/>2017级软件3班
+		<input type="checkbox" name="stu"/>2017级软件4班
+		<div id="student" onclick="fun()">
+			开始随机！
+		</div>		
+	</body>
+</html>
